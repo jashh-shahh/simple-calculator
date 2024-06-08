@@ -1,0 +1,111 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text('Calculator App')),
+        body: Calculator(),
+      ),
+    );
+  }
+}
+
+class Calculator extends StatefulWidget {
+  @override
+  _CalculatorState createState() => _CalculatorState();
+}
+
+class _CalculatorState extends State<Calculator> {
+  TextEditingController txt1 = TextEditingController();
+  TextEditingController txt2 = TextEditingController();
+  String result = "";
+
+  void doOperation(String operation) {
+    var a = int.tryParse(txt1.text);
+    var b = int.tryParse(txt2.text);
+    var res;
+
+    if (a == null || b == null) {
+      res = 'Error: Invalid input';
+    } else {
+      switch (operation) {
+        case '+':
+          res = a + b;
+          break;
+        case '-':
+          res = a - b;
+          break;
+        case '*':
+          res = a * b;
+          break;
+        case '/':
+          res = b != 0 ? a ~/ b : 'Error: Div by 0'; // Integer division
+          break;
+      }
+    }
+
+    setState(() {
+      result = "Result is $res";
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextField(
+            controller: txt1,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              hintText: 'Enter first number',
+            ),
+          ),
+          SizedBox(height: 10),
+          TextField(
+            controller: txt2,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              hintText: 'Enter second number',
+            ),
+          ),
+          SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                onPressed: () => doOperation('+'),
+                child: Text("+"),
+              ),
+              ElevatedButton(
+                onPressed: () => doOperation('-'),
+                child: Text("-"),
+              ),
+              ElevatedButton(
+                onPressed: () => doOperation('*'),
+                child: Text("*"),
+              ),
+              ElevatedButton(
+                onPressed: () => doOperation('/'),
+                child: Text("/"),
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+          Text(
+            result,
+            style: TextStyle(fontSize: 20),
+          ),
+        ],
+      ),
+    );
+  }
+}
